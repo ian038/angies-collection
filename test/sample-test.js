@@ -1,19 +1,33 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+describe("Collections", function () {
+  it("Should create and list items", async function () {
+    const Collection = await ethers.getContractFactory('Collection')
+    const collection = await Collection.deploy()
+    await collection.deployed()
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    const NFT = await ethers.getContractFactory('NFT')
+    const nft = await NFT.deploy()
+    await nft.deployed()
+    const nftAddress = nft.address
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+    await nft.createToken("https://www.mytokenlocation.com")
+    await nft.createToken("https://www.mytokenlocation2.com")
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
+    await collection.createCollectionItem(nftAddress, 1)
+    await collection.createCollectionItem(nftAddress, 2)
 
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    let items = await collection.fetchCollectionItems()
+    items = await Promise.all(items.map(async i => {
+      const tokenUri = await nft.tokenURI(i.tokenId)
+      let item = {
+        tokenId: i.tokenId.toString(),
+        owner: i.owner,
+        tokenUri
+      }
+      return item
+    }))
+    console.log('Items: ', items)
   });
 });

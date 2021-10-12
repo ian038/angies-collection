@@ -58,15 +58,12 @@ contract Collection is ReentrancyGuard {
         uint itemCount = 0;
         uint currentIndex = 0;
 
+        for (uint i = 0; i < totalItemCount; i++) {
+            itemCount += 1;
+        }
+
         CollectionItem[] memory items = new CollectionItem[](itemCount);
-        // for (uint i = 0; i < totalItemCount; i++) {
-        //     if (idToCollectionItem[i + 1].owner == msg.sender) {
-        //         uint currentId = i + 1;
-        //         CollectionItem storage currentItem = idToCollectionItem[currentId];
-        //         items[currentIndex] = currentItem;
-        //         currentIndex += 1;
-        //     }
-        // }
+
         for (uint i = 0; i < totalItemCount; i++) {
             uint currentId = i + 1;
             CollectionItem storage currentItem = idToCollectionItem[currentId];
