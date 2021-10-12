@@ -18,7 +18,7 @@ describe("Collections", function () {
     await collection.createCollectionItem(nftAddress, 1)
     await collection.createCollectionItem(nftAddress, 2)
 
-    let items = await collection.fetchCollectionItems()
+    let items = await collection.fetchMyNFTs()
     items = await Promise.all(items.map(async i => {
       const tokenUri = await nft.tokenURI(i.tokenId)
       let item = {

@@ -52,23 +52,26 @@ contract Collection is ReentrancyGuard {
         );
     }
 
-      /* Returns items in collection */
-    function fetchCollectionItems() public view returns (CollectionItem[] memory) {
+    function fetchMyNFTs() public view returns (CollectionItem[] memory) {
         uint totalItemCount = _itemIds.current();
         uint itemCount = 0;
         uint currentIndex = 0;
 
         for (uint i = 0; i < totalItemCount; i++) {
-            itemCount += 1;
+            if (idToCollectionItem[i + 1].owner == msg.sender) {
+                itemCount += 1;
+            }
         }
 
         CollectionItem[] memory items = new CollectionItem[](itemCount);
 
         for (uint i = 0; i < totalItemCount; i++) {
-            uint currentId = i + 1;
-            CollectionItem storage currentItem = idToCollectionItem[currentId];
-            items[currentIndex] = currentItem;
-            currentIndex += 1;
+            if (idToCollectionItem[i + 1].owner == msg.sender) {
+                uint currentId = i + 1;
+                CollectionItem storage currentItem = idToCollectionItem[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
         }
         return items;
     }
