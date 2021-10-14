@@ -19,12 +19,15 @@ export default function Home() {
 
   const loadNFTs = async () => {    
     const web3Modal = new Web3Modal()
-    const connection = await web3Modal.connect()
-    const provider = new ethers.providers.Web3Provider(connection)
-    const signer = provider.getSigner()
+    let provider = new ethers.providers.JsonRpcProvider('https://rpc-mumbai.maticvigil.com')
 
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
-    const collectionContract = new ethers.Contract(collectionaddress, Collection.abi, signer)
+    let collectionContract = new ethers.Contract(collectionaddress, Collection.abi, provider)
+
+    const connection = await web3Modal.connect()
+    provider = new ethers.providers.Web3Provider(connection)
+    const signer = provider.getSigner()
+    collectionContract = new ethers.Contract(collectionaddress, Collection.abi, signer)
     const data = await collectionContract.fetchMyNFTs()
     
     const items = await Promise.all(data.map(async i => {
