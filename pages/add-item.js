@@ -14,6 +14,7 @@ const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 export default function AddItem() {
   const [fileUrl, setFileUrl] = useState(null)
   const [formInput, setFormInput] = useState({ name: '', description: '' })
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleChange = async (e) => {
@@ -51,6 +52,8 @@ export default function AddItem() {
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)    
     const signer = provider.getSigner()
+
+    setLoading(true)
     
     /* next, create the item */
     let contract = new ethers.Contract(nftaddress, NFT.abi, signer)
@@ -64,6 +67,7 @@ export default function AddItem() {
     contract = new ethers.Contract(collectionaddress, Collection.abi, signer)
     transaction = await contract.createCollectionItem(nftaddress, tokenId)
     await transaction.wait()
+    setLoading(false)
     router.push('/')
   }
 

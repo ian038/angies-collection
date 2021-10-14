@@ -8,6 +8,7 @@ import { nftaddress, collectionaddress } from '../config'
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Collection from '../artifacts/contracts/Collection.sol/Collection.json'
+import Spinner from '../components/Spinner'
 
 export default function Home() {
   const [nfts, setNfts] = useState([])
@@ -47,6 +48,7 @@ export default function Home() {
   }
 
   if (loading === false && !nfts.length) return (<h1 className="px-20 py-10 text-3xl">No items in collection</h1>)
+  if(loading) return <Spinner />
 
   return (
     <div>
