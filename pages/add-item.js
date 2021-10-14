@@ -8,6 +8,7 @@ import { nftaddress, collectionaddress } from '../config'
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Collection from '../artifacts/contracts/Collection.sol/Collection.json'
+import Spinner from '../components/Spinner'
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
@@ -70,6 +71,8 @@ export default function AddItem() {
     setLoading(false)
     router.push('/')
   }
+
+  if(loading) return <Spinner />
 
   return (
     <div className="flex justify-center">
